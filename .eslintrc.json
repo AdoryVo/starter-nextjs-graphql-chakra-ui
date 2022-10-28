@@ -12,6 +12,9 @@
   "rules": {
     "indent": ["error", 2],
     "jsx-quotes": ["error", "prefer-double"],
+    "semi": ["error", "never"],
+    "quotes": ["error", "single"],
+
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error"
   }
