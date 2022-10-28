@@ -3,7 +3,7 @@
 }
 
 .main {
-  min-height: 100vh;
+  min-height: 90vh;
   padding: 4rem 0;
   flex: 1;
   display: flex;
@@ -48,6 +48,17 @@
 .title,
 .description {
   text-align: center;
+}
+
+.description a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.description a:hover,
+.description a:focus,
+.description a:active {
+  text-decoration: underline;
 }
 
 .description {
@@ -116,10 +127,6 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .card,
-  .footer {
-    border-color: #222;
-  }
   .code {
     background: #111;
   }
