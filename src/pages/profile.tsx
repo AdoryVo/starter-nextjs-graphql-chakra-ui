@@ -33,7 +33,7 @@ export default function Profile() {
         <br/>
         User since: {new Date(profile.created_at).toDateString()}
         <br/>
-        <Button colorScheme="red" onClick={handleSignOut} my={4}>Sign Out</Button>
+        <Button colorScheme="red" onClick={handleSignOut} my={4}>Sign out</Button>
       </Container>
     </>
   )

@@ -105,7 +105,7 @@ export default function SignUp() {
             />
           </FormControl>
 
-          <Button colorScheme="green" type="submit" mt={5}>Sign Up</Button>
+          <Button colorScheme="green" type="submit" mt={5}>Sign up</Button>
         </form>
       </Container>
     </>
