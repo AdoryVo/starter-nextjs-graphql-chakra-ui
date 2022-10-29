@@ -22,7 +22,7 @@ export default function Home() {
           Get started by editing{' '}
           <code className={styles.code}>pages/index.tsx</code>
           <br />
-          or sign in <Link href="/login">here!</Link>
+          or sign in <Link href="/signin">here!</Link>
         </p>
 
         <div className={styles.grid}>

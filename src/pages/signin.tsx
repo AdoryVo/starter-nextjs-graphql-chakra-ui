@@ -6,7 +6,7 @@ import { NextSeo } from 'next-seo'
 
 import Loading from '../components/Loading'
 
-export default function Login() {
+export default function SignIn() {
   const router = useRouter()
   const { error } = router.query
   const { status } = useSession()
@@ -17,7 +17,7 @@ export default function Login() {
       password: ''
     },
     validate: () => {
-      router.push('/login', undefined, { shallow: true })
+      router.push('/signin', undefined, { shallow: true })
       return {}
     },
     onSubmit: (values) => {
@@ -32,13 +32,13 @@ export default function Login() {
   return (
     <>
       <NextSeo
-        title="Login"
-        description="Login to your account here."
+        title="Sign in"
+        description="Sign in to your account here."
       />
       <Container>
-        <Heading my={5}>Login</Heading>
+        <Heading my={5}>Sign in</Heading>
         <form onSubmit={formik.handleSubmit}>
-          <FormControl isInvalid={Boolean(error)} mb={3}>
+          <FormControl isInvalid={error === 'CredentialsSignin'} mb={3}>
             <FormLabel htmlFor="email">Email Address</FormLabel>
             <Input
               id="email"
@@ -50,7 +50,7 @@ export default function Login() {
             />
           </FormControl>
 
-          <FormControl isInvalid={Boolean(error)}>
+          <FormControl isInvalid={error === 'CredentialsSignin'}>
             <FormLabel htmlFor="password">Password</FormLabel>
             <Input
               id="password"
@@ -63,7 +63,7 @@ export default function Login() {
             {error && <FormErrorMessage>Incorrect email or password.</FormErrorMessage>}
           </FormControl>
 
-          <Button colorScheme="blue" type="submit" mt={5}>Log In</Button>
+          <Button colorScheme="blue" type="submit" mt={5}>Sign In</Button>
         </form>
       </Container>
     </>

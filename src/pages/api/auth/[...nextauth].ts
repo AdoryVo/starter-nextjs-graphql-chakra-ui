@@ -57,9 +57,9 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
   const callbacks = {
     async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
-      // If logging out, remove cookies
-      if (url.startsWith('/login')) {
-        await client.post('signout', { headers: { 'Clear-Site-Data': 'cookies' } }).then(() => {
+      // If signing out, remove cookies
+      if (url.startsWith('/signin')) {
+        await client.post('signout').then(() => {
           res.setHeader('Set-Cookie', 'id=; Path=/; Max-Age=0;')
         })
       }
@@ -73,7 +73,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const pages = {
-    signIn: '/login'
+    signIn: '/signin'
   }
 
   return await NextAuth(req, res, {

@@ -11,12 +11,12 @@ export default function Profile() {
 
   if (status === 'loading' || loading) return <Loading />
   if (!profile) {
-    handleLogOut()
+    handleSignOut()
     return 'Redirecting...'
   }
 
-  function handleLogOut() {
-    signOut({ callbackUrl: '/login' })
+  function handleSignOut() {
+    signOut({ callbackUrl: '/signin' })
   }
 
   return (
@@ -36,7 +36,7 @@ export default function Profile() {
         <br/>
         User since: {new Date(profile.created_at).toDateString()}
         <br/>
-        <Button colorScheme="red" onClick={handleLogOut} my={4}>Log Out</Button>
+        <Button colorScheme="red" onClick={handleSignOut} my={4}>Sign Out</Button>
       </Container>
     </>
   )
