@@ -1,5 +1,6 @@
 import { Button, Container, FormControl, FormErrorMessage, FormLabel, Heading, Input } from '@chakra-ui/react'
 import { useFormik } from 'formik'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { signIn, useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
@@ -17,6 +18,7 @@ export default function SignIn() {
       password: ''
     },
     validate: () => {
+      // Refresh URL on retry
       router.push('/signin', undefined, { shallow: true })
       return {}
     },
@@ -39,32 +41,39 @@ export default function SignIn() {
         <Heading my={5}>Sign in</Heading>
         <form onSubmit={formik.handleSubmit}>
           <FormControl isInvalid={error === 'CredentialsSignin'} mb={3}>
-            <FormLabel htmlFor="email">Email Address</FormLabel>
+            <FormLabel>Email Address</FormLabel>
             <Input
-              id="email"
               name="email"
               type="email"
               onChange={formik.handleChange}
               value={formik.values.email}
               autoComplete="username email"
+              required
             />
           </FormControl>
 
           <FormControl isInvalid={error === 'CredentialsSignin'}>
-            <FormLabel htmlFor="password">Password</FormLabel>
+            <FormLabel>Password</FormLabel>
             <Input
-              id="password"
               name="password"
               type="password"
               onChange={formik.handleChange}
               value={formik.values.password}
               autoComplete="current-password"
+              required
             />
-            {error && <FormErrorMessage>Incorrect email or password.</FormErrorMessage>}
+            <FormErrorMessage>Incorrect email or password.</FormErrorMessage>
           </FormControl>
 
-          <Button colorScheme="blue" type="submit" mt={5}>Sign In</Button>
+          <Button colorScheme="blue" type="submit" my={5}>Sign In</Button>
         </form>
+
+        <hr />
+        Don&apos;t have an account? Sign up here!
+        <br />
+        <Button colorScheme="green" type="submit" mt={5}>
+          <Link href="/signup">Sign up</Link>
+        </Button>
       </Container>
     </>
   )

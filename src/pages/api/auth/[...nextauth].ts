@@ -1,11 +1,10 @@
-import ky from 'ky'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-export default async function auth(req: NextApiRequest, res: NextApiResponse) {
-  const client = ky.create({ prefixUrl: 'http://localhost:8000' })
+import fetcher from '../../../data/fetcher'
 
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const providers = [
     CredentialsProvider({
       id: 'credentials',
@@ -15,8 +14,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
       // `credentials` is used to generate a form on the sign in page.
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         email: { label: 'Email', type: 'email', placeholder: 'jdoe@gmail.com' },
         password: { label: 'Password', type: 'password' }
@@ -27,24 +24,19 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           return null
         }
 
-        const body = new URLSearchParams()
-        body.append('email', credentials.email)
-        body.append('password', credentials.password)
-
-        const user = await client.post('signin', { body: body })
-          .then((response) => {
-            const cookie = response.headers.get('set-cookie')
-            if (cookie) {
-              res.setHeader('Set-Cookie', cookie)
+        const query = `
+          {
+            user(email: "${credentials.email}", password: "${credentials.password}") {
+              email
             }
-            return true
-          }).catch(() => {
-            return null
-          })
+          }
+        `
+
+        const { user } = await fetcher({ query }, { useAbsoluteUrl: true })
 
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
-          return { id: credentials.email }
+          return { id: '_', email: credentials.email }
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null
@@ -55,30 +47,12 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     }),
   ]
 
-  const callbacks = {
-    async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
-      // If signing out, remove cookies
-      if (url.startsWith('/signin')) {
-        await client.post('signout').then(() => {
-          res.setHeader('Set-Cookie', 'id=; Path=/; Max-Age=0;')
-        })
-      }
-
-      // Allows relative callback URLs
-      if (url.startsWith('/')) return `${baseUrl}${url}`
-      // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url
-      return baseUrl
-    }
-  }
-
   const pages = {
     signIn: '/signin'
   }
 
   return await NextAuth(req, res, {
     providers,
-    callbacks,
     pages
   })
 }

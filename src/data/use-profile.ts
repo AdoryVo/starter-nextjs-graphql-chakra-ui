@@ -1,25 +1,38 @@
-import useSWR, { Fetcher } from 'swr'
+import { useSession } from 'next-auth/react'
+import useSWR from 'swr'
 
-import client from './client'
+import fetcher from './fetcher'
 
 export default function useProfile() {
-  interface Profile {
-    first_name: string
-    last_name: string
-    school: string
-    biography: string
-    created_at: string
+  const { data: session } = useSession()
+  const email = session && session.user ? session.user.email : 'jdoe@gmail.com'
+
+  const query = `
+    {
+      user(email: "${email}") {
+        first_name
+        last_name
+        created_at
+      }
+    }
+  `
+
+  const { data, mutate, error } = useSWR({ query }, fetcher)
+
+  const profile = data ? data.user : null
+
+  if (data && data.user === null) {
+    // Internal server error - backend returned null user
+    return {
+      profile,
+      error: true,
+      mutate
+    }
   }
 
-  const fetcher: Fetcher<Profile, string> = (path: string) => client.get(path).json()
-
-  const { data, mutate, error } = useSWR('profile', fetcher)
-
-  const loading = !data && !error
-
   return {
-    loading,
-    profile: data,
+    profile,
+    error,
     mutate
   }
 }

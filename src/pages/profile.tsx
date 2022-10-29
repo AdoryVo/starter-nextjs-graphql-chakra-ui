@@ -6,14 +6,14 @@ import Loading from '../components/Loading'
 import useProfile from '../data/use-profile'
 
 export default function Profile() {
-  const { profile, loading } = useProfile()
+  const { profile, error } = useProfile()
   const { status } = useSession({ required: true }) // Auth required on this page
 
-  if (status === 'loading' || loading) return <Loading />
-  if (!profile) {
+  if (error) {
     handleSignOut()
-    return 'Redirecting...'
+    return <Loading />
   }
+  if (status === 'loading' || !profile) return <Loading />
 
   function handleSignOut() {
     signOut({ callbackUrl: '/signin' })
@@ -30,9 +30,6 @@ export default function Profile() {
         <Heading textTransform="capitalize" size="lg" mb={3}>
           {`${profile.first_name} ${profile.last_name}`}
         </Heading>
-        School: {profile.school}
-        <br/>
-        Biography: {profile.biography}
         <br/>
         User since: {new Date(profile.created_at).toDateString()}
         <br/>
