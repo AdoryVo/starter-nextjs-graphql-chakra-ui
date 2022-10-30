@@ -1,4 +1,6 @@
-import { Button, Container, FormControl, FormErrorMessage, FormLabel, Heading, Input } from '@chakra-ui/react'
+import {
+  Button, Container, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input
+} from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import { signIn, useSession } from 'next-auth/react'
@@ -40,7 +42,11 @@ export default function SignUp() {
         if (message && message !== 'Success!') {
           setEmailError(message)
         } else {
-          signIn('credentials', { callbackUrl: '/profile', email: values.email, password: values.password })
+          signIn('credentials', {
+            callbackUrl: '/profile',
+            email: values.email,
+            password: values.password
+          })
         }
       })
     }
@@ -103,6 +109,7 @@ export default function SignUp() {
               autoComplete="current-password"
               required
             />
+            <FormHelperText>Your password will be securely encrypted & hashed.</FormHelperText>
           </FormControl>
 
           <Button colorScheme="green" type="submit" mt={5}>Sign up</Button>

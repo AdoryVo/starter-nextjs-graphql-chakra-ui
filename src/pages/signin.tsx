@@ -1,4 +1,6 @@
-import { Button, Container, Divider, FormControl, FormErrorMessage, FormLabel, Heading, Input, Text } from '@chakra-ui/react'
+import {
+  Button, Container, Divider, FormControl, FormErrorMessage, FormLabel, Heading, Input, Text
+} from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -70,10 +72,13 @@ export default function SignIn() {
 
         <Divider my={5} />
 
-        Don&apos;t have an account? Sign up here!
-        <Button colorScheme="green" display="block" my={5}>
-          <Link href="/signup">Sign up</Link>
-        </Button>
+        <Text>Don&apos;t have an account? Sign up here!</Text>
+
+        <Link href="/signup" passHref>
+          <Button colorScheme="green" my={5}>
+          Sign up
+          </Button>
+        </Link>
 
         <Text fontSize="sm">
           <Link href="/">← Return home</Link>

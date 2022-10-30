@@ -17,7 +17,12 @@
     }],
     "jsx-quotes": ["error", "prefer-double"],
     "no-trailing-spaces": "error",
+    "object-curly-newline": ["error", {
+      "multiline": true,
+      "minProperties": 4
+    }],
     "object-curly-spacing": ["error", "always"],
+    "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }],
     "semi": ["error", "never"],
     "quotes": ["error", "single"],
 

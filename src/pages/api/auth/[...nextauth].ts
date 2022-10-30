@@ -47,9 +47,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     }),
   ]
 
-  const pages = {
-    signIn: '/signin'
-  }
+  const pages = { signIn: '/signin' }
 
   return await NextAuth(req, res, {
     providers,

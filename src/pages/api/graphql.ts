@@ -1,4 +1,5 @@
 // https://the-guild.dev/graphql/yoga-server/v3
+import bcrypt from 'bcryptjs'
 import { createSchema, createYoga } from 'graphql-yoga'
 
 export interface Result {
@@ -38,7 +39,13 @@ const typeDefs = /* GraphQL */ `
 `
 
 const users: User[] = [
-  { email: 'jdoe@gmail.com', password: 'hunter2', first_name: 'John', last_name: 'Doe', created_at: '2022-07-15T02:51:17.618150Z' },
+  {
+    email: 'jdoe@gmail.com',
+    password: '$2a$10$VXJmZqq.AXbflRMRCu5byue95XkThXSRlpTXmGptMXU2eS7NABUAO',
+    first_name: 'John',
+    last_name: 'Doe',
+    created_at: '2022-07-15T02:51:17.618150Z'
+  },
 ]
 
 const resolvers = {
@@ -46,9 +53,15 @@ const resolvers = {
     user(_parent: object, args: { email: string, password: string }) {
       // Returns null if a user is not found
       const user = users.find((user) => user.email === args.email)
-      if (user && args.password && user.password !== args.password) {
-        return null
+
+      // If signin query, check password
+      if (user && args.password) {
+        const correct = bcrypt.compareSync(args.password, user.password)
+        if (!correct) {
+          return null
+        }
       }
+
       return user
     }
   },
@@ -60,6 +73,10 @@ const resolvers = {
       if (users.some((user) => user.email === newUser.email)) {
         return 'Email is already in use!'
       }
+
+      // Hash password
+      const salt = bcrypt.genSaltSync(10)
+      newUser.password = bcrypt.hashSync(newUser.password, salt)
 
       users.push(newUser)
 

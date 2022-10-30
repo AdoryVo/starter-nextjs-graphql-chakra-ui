@@ -8,9 +8,7 @@ interface Body {
   variables?: object
 }
 
-const defaultOptions = {
-  useAbsoluteUrl: false
-}
+const defaultOptions = { useAbsoluteUrl: false }
 
 const fetcher = (body: Body, options = defaultOptions) => {
   let path = '/api/graphql'
