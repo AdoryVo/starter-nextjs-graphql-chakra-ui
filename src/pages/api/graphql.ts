@@ -1,6 +1,7 @@
 // https://the-guild.dev/graphql/yoga-server/v3
 import bcrypt from 'bcryptjs'
 import { createSchema, createYoga } from 'graphql-yoga'
+import _ from 'lodash'
 
 export interface Result {
   data: { user?: User, addUser?: string }
@@ -38,13 +39,14 @@ const typeDefs = /* GraphQL */ `
   }
 `
 
+// Fake users data
 const users: User[] = [
   {
     email: 'jdoe@gmail.com',
     password: '$2a$10$VXJmZqq.AXbflRMRCu5byue95XkThXSRlpTXmGptMXU2eS7NABUAO',
     first_name: 'John',
     last_name: 'Doe',
-    created_at: '2022-07-15T02:51:17.618150Z'
+    created_at: '2022-07-15T02:51:17.618150Z',
   },
 ]
 
@@ -62,8 +64,8 @@ const resolvers = {
         }
       }
 
-      return user
-    }
+      return _.omit(user, 'password')
+    },
   },
   Mutation: {
     addUser(_parent: object, { input }: { input: User }) {
@@ -81,17 +83,17 @@ const resolvers = {
       users.push(newUser)
 
       return 'Success!'
-    }
-  }
+    },
+  },
 }
 
 const schema = createSchema({
   typeDefs,
-  resolvers
+  resolvers,
 })
 
 export default createYoga({
   schema,
   // Needed to be defined explicitly because our endpoint lives at a different path other than `/graphql`
-  graphqlEndpoint: '/api/graphql'
+  graphqlEndpoint: '/api/graphql',
 })

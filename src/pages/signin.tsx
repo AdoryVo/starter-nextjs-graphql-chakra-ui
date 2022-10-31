@@ -17,7 +17,7 @@ export default function SignIn() {
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: ''
+      password: '',
     },
     validate: () => {
       // Refresh URL on retry
@@ -27,7 +27,7 @@ export default function SignIn() {
     onSubmit: (values) => {
       const { email, password } = values
       signIn('credentials', { callbackUrl: '/profile', email, password })
-    }
+    },
   })
 
   if (status === 'loading') return <Loading />

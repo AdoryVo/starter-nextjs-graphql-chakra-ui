@@ -16,7 +16,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       credentials: {
         email: { label: 'Email', type: 'email', placeholder: 'jdoe@gmail.com' },
-        password: { label: 'Password', type: 'password' }
+        password: { label: 'Password', type: 'password' },
       },
 
       async authorize(credentials) {
@@ -24,7 +24,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           return null
         }
 
-        const query = `
+        const query = `#graphql
           {
             user(email: "${credentials.email}", password: "${credentials.password}") {
               email
@@ -43,7 +43,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
-      }
+      },
     }),
   ]
 
@@ -51,6 +51,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
   return await NextAuth(req, res, {
     providers,
-    pages
+    pages,
   })
 }

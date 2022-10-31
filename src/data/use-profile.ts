@@ -7,7 +7,7 @@ export default function useProfile() {
   const { data: session } = useSession()
   const email = session && session.user ? session.user.email : 'jdoe@gmail.com'
 
-  const query = `
+  const query = `#graphql
     {
       user(email: "${email}") {
         first_name
@@ -26,13 +26,13 @@ export default function useProfile() {
     return {
       profile,
       error: true,
-      mutate
+      mutate,
     }
   }
 
   return {
     profile,
     error,
-    mutate
+    mutate,
   }
 }

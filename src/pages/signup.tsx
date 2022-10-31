@@ -16,7 +16,7 @@ export default function SignUp() {
   const router = useRouter()
   const { status } = useSession()
 
-  const [emailError, setEmailError,] = useState(HIDDEN)
+  const [emailError, setEmailError] = useState(HIDDEN)
 
   const query = `
     mutation AddUser($input: SignUpInput!) {
@@ -29,7 +29,7 @@ export default function SignUp() {
       email: '',
       password: '',
       first_name: '',
-      last_name: ''
+      last_name: '',
     },
     validate: () => {
       // Remove email error message on retry
@@ -45,11 +45,11 @@ export default function SignUp() {
           signIn('credentials', {
             callbackUrl: '/profile',
             email: values.email,
-            password: values.password
+            password: values.password,
           })
         }
       })
-    }
+    },
   })
 
   if (status === 'loading') return <Loading />
