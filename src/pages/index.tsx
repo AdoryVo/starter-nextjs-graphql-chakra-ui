@@ -1,3 +1,4 @@
+import { Button, useColorMode } from '@chakra-ui/react'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -5,6 +6,8 @@ import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
+  const { colorMode, toggleColorMode } = useColorMode()
+
   return (
     <div className={styles.container}>
       <Head>
@@ -23,6 +26,18 @@ export default function Home() {
           <code className={styles.code}>pages/index.tsx</code>
           <br />
           or sign in <Link href="/signin">here!</Link>
+          <br />
+          <Button onClick={toggleColorMode} mt={4}>
+            {colorMode === 'light' ?
+              <>
+                Dark Mode
+              </>
+              :
+              <>
+                Light Mode
+              </>
+            }
+          </Button>
         </p>
 
         <div className={styles.grid}>
