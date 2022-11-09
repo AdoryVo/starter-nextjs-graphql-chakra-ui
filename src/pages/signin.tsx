@@ -6,13 +6,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { signIn, useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
+import { useState } from 'react'
 
 import Loading from '../components/Loading'
 
 export default function SignIn() {
   const router = useRouter()
-  const { error } = router.query
   const { status } = useSession()
+  const [error, setError] = useState('')
 
   const formik = useFormik({
     initialValues: {
@@ -20,13 +21,20 @@ export default function SignIn() {
       password: '',
     },
     validate: () => {
-      // Refresh URL on retry
-      router.push('/signin', undefined, { shallow: true })
+      // Remove error alert on retry
+      setError('')
       return {}
     },
     onSubmit: (values) => {
       const { email, password } = values
-      signIn('credentials', { callbackUrl: '/profile', email, password })
+      signIn('credentials', {
+        redirect: false, callbackUrl: '/profile', email, password,
+      }).then((response) => {
+        // Set `error` to display respective alerts
+        if (response && response.error) {
+          setError(response.error)
+        }
+      })
     },
   })
 
